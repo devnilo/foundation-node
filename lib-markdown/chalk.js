@@ -1,7 +1,7 @@
 /* utilizamos o comando 'npm install chalk' no git bash, para fazer a instalação dessa biblioteca do node */
 // o chalk é usado para colorir os textos
-
 import chalk from 'chalk';
+
 const log = console.log;
 
 // irei pintar meu texto utilizando o chalk
