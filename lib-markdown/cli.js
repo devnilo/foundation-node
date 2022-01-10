@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import pegaArquivo from './index';
+import pegaArquivo from './regex';
 import validaURLs from './http-validacao';
 
 const caminho = process.argv;
