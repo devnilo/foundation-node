@@ -1,3 +1,5 @@
+// map é usado para retornar um array novo baseado no que o usuario pediu
+
 const service = require('./service')
 
 Array.prototype.meuMap = function(callback) {
