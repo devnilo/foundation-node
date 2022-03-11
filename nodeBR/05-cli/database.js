@@ -1,7 +1,6 @@
 const {
     readFile,
     writeFile,
-    write
 } = require('fs')
 
 const {
@@ -40,7 +39,7 @@ class Database {
             ...dados,
             heroiComId
         ]
-        
+
         const resultado = await this.escreverArquivo(dadosFinal)
 
         return resultado;
