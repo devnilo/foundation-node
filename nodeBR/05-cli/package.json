@@ -1,18 +1,17 @@
 {
-  "name": "05-cli",
+  "name": "module04-arquivos",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "database.js",
   "scripts": {
-    "test": "mocha -w"
+    "test": "mocha -w --reporter nyan"
   },
-  "keywords": [],
-  "author": "",
+  "author": "erickwendel",
   "license": "ISC",
   "devDependencies": {
-    "mocha": "^9.2.2"
+    "mocha": "^5.2.0"
   },
   "dependencies": {
-    "commander": "^9.0.0"
+    "commander": "^2.20.3"
   }
 }
