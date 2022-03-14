@@ -16,3 +16,25 @@ docker run \
     --link postgres:postgres \
     -d \
     adminer
+
+
+## --- MONGODB
+
+docker run \
+    --name mongodb \
+    -p 27017:27017 \
+    -e MONGO_INITDB_ROOT_USERNAME=admin \
+    -e MONGO_INITDB_ROOT_PASSWORD=test \
+    -d \
+    mongo:4
+
+docker run \
+    --name mongoclient \
+    -p 3000:3000 \
+    --link mongodb:mongodb \
+    -d \
+    mongoclient/mongoclient
+
+docker exec -it mongodb \
+    mongo --host localhost -u admin -p test --authenticationDatabase admin \
+    --eval "db.getSiblingDB('herois').createUser({user: 'devnilo', pwd: 'test', roles: [{role: 'readWrite', db: 'herois'}]})"
