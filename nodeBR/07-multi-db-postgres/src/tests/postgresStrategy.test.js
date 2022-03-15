@@ -3,12 +3,26 @@ const Postgres = require('../db/strategies/postgres')
 const ContextStrategy = require('../db/strategies/base/contextStrategy')
 
 const context = new ContextStrategy(new Postgres())
+const MOCK_HEROI_CADASTRAR = { 
+    nome: 'Homem Aranha', 
+    poder: 'Teia' 
+}
 
 describe('Postgres Strategy', function () {
     this.timeout(Infinity)
+    this.beforeAll(async function () {
+        await context.connect()
+    })
     
     it('PostgresSQL Connection', async function () {
         const result = await context.isConnected()
         assert.equal(result, true)
+    })
+
+    it('PostgresSQL Register', async function () {
+        const result = await context.create(MOCK_HEROI_CADASTRAR)
+        delete result.id
+
+        assert.deepEqual(result, MOCK_HEROI_CADASTRAR)
     })
 })
