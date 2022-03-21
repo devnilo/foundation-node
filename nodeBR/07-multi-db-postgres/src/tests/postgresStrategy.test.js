@@ -8,10 +8,16 @@ const MOCK_HEROI_CADASTRAR = {
     poder: 'Teia' 
 }
 
+const MOCK_HEROI_ATUALIZAR = { 
+    nome: 'Batman', 
+    poder: 'Dinheiro' 
+}
+
 describe('Postgres Strategy', function () {
     this.timeout(Infinity)
     this.beforeAll(async function () {
         await context.connect()
+        await context.create(MOCK_HEROI_ATUALIZAR)
     })
     
     it('PostgresSQL Connection', async function () {
@@ -26,10 +32,28 @@ describe('Postgres Strategy', function () {
         assert.deepEqual(result, MOCK_HEROI_CADASTRAR)
     })
     
-    it('PostgresSQL Listing', async function () {
+    it('PostgresSQL List', async function () {
         const [result] = await context.read({ nome: MOCK_HEROI_CADASTRAR.nome })
         delete result.id 
 
         assert.deepEqual(result, MOCK_HEROI_CADASTRAR)
+    })
+
+    it('PostgresSQL Update', async function () {
+        const [itemAtualizar] = await context.read({ nome: MOCK_HEROI_ATUALIZAR.nome})
+        const novoItem = {
+            ...MOCK_HEROI_ATUALIZAR,
+            nome: 'Homem de Ferro'
+        }
+
+        const [result] = await context.update(itemAtualizar.id, novoItem)
+        const [itemAtualizado] = await context.read({ id: itemAtualizar.id})
+
+        assert.deepEqual(result, 1)
+        assert.deepEqual(itemAtualizado.nome, novoItem.nome)
+
+
+        /* No JavaScript temos uma tecnica read/spread que é um metodo usado para mergear objetos
+        ou separa-lo */
     })
 })
