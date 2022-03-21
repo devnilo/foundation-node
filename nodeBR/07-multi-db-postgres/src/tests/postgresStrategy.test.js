@@ -17,6 +17,7 @@ describe('Postgres Strategy', function () {
     this.timeout(Infinity)
     this.beforeAll(async function () {
         await context.connect()
+        await context.delete()
         await context.create(MOCK_HEROI_ATUALIZAR)
     })
     
@@ -52,8 +53,14 @@ describe('Postgres Strategy', function () {
         assert.deepEqual(result, 1)
         assert.deepEqual(itemAtualizado.nome, novoItem.nome)
 
-
         /* No JavaScript temos uma tecnica read/spread que é um metodo usado para mergear objetos
         ou separa-lo */
+    })
+
+    it('PostgresSQL Remove', async function () {
+        const [item] = await context.read({})
+        const result = await context.delete(item.id)
+
+        assert.deepEqual(result, 1)
     })
 })
