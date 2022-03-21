@@ -28,7 +28,7 @@ describe('Postgres Strategy', function () {
     
     it('PostgresSQL Listing', async function () {
         const [result] = await context.read({ nome: MOCK_HEROI_CADASTRAR.nome })
-        delete result.id
+        delete result.id 
 
         assert.deepEqual(result, MOCK_HEROI_CADASTRAR)
     })
