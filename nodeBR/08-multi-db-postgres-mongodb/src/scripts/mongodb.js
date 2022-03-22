@@ -1,17 +1,17 @@
 
-docker ps
+// docker ps
 
 // comando para iniciar
-docker exec -it 03f22e83f09c mongo -u devnilo -p test --authenticationDatabase herois 
+// docker exec -it 03f22e83f09c mongo -u devnilo -p test --authenticationDatabase herois 
 
-// databases
-show dbs
+// mostrar databases
+// show dbs
 
 // mudando o contexto para uma database
-use herois
+// use herois
 
 // mostrar tables(coleções)
-show collections 
+// show collections 
 
 db.herois.insert({
     nome: 'Flash',
