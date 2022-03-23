@@ -7,6 +7,7 @@ const STATUS = {
     3: 'DESCONECTANDO'
 }
 
+
 class MongoDB extends ICrud {
     constructor() {
         super()
@@ -15,7 +16,7 @@ class MongoDB extends ICrud {
     }
 
     async isConnected() {
-        const state = STATUS[connection.readyState]
+        const state = STATUS[this._driver.readyState]
 
         if (state === 'CONECTADO') return state;
 
@@ -23,11 +24,11 @@ class MongoDB extends ICrud {
 
         await new Promise(resolve => setTimeout(resolve, 1000))
 
-        return STATUS[connection.readyState]
+        return STATUS[this._driver.readyState]
     }
 
     defineModel() {
-        this._herois = new Mongoose.Schema({
+        heroiSchema = new Mongoose.Schema({
             nome: {
                 type: String,
                 required: true
@@ -42,7 +43,7 @@ class MongoDB extends ICrud {
             }
         })
 
-        const model = Mongoose.model('Heroi', heroiSchema)
+        this._herois = Mongoose.model('Heroi', heroiSchema)
     }
 
     connect() {
@@ -58,9 +59,11 @@ class MongoDB extends ICrud {
 
         const connection = Mongoose.connection
         connection.once('open', () => console.log('database rodando!'))
+
+        this._driver = connection
     }
 
-    create(item) {
+    async create(item) {
         const resultCadastrar = await model.create({
             nome: 'Clone Laranja',
             poder: 'Clonagem'
