@@ -1,73 +1,58 @@
-const ICrud = require('./interfaces/interfaceCrud')
+const ICrud = require('./../interfaces/interfaceCrud')
 const Sequelize = require('sequelize')
 
 
 class Postgres extends ICrud {
-    constructor() {
+    constructor(connection, schema) {
         super()
-        this.driver =  null
-        this._herois = null
+        this._connection =  connection
+        this._schema = schema
     }
 
     async isConnected() {
         try {
-            await this._driver.authenticate()
+            await this._connection.authenticate()
             return true;
         }
         catch(error) {
             console.error('DEU RUIM!', error)
         }
     }
-    async defineModel() {
-            this._herois = this._driver.define('herois', {
-                id: {
-                    type: Sequelize.INTEGER,
-                    required: true,
-                    primaryKey: true,
-                    autoIncrement: true
-                },
-        
-                nome: {
-                    type: Sequelize.STRING,
-                    required: true
-                },
-        
-                poder: {
-                    type: Sequelize.STRING,
-                    required: true
-                }
-            },  {
-                    tableName: 'TB_HEROIS',
-                    freezeTableName: false,
-                    timestamps: false
-            })
-        
-            await this._herois.sync()
+
+    static async defineModel(connection, schema) {       
+        const model = connection.define(
+            schema.name, schema.schema, schema.options
+        )
+
+        await model.sync()
+
+        return model
     }
+
     async create(item) {
         const {
             dataValues
-        } = await this._herois.create(item, {raw: true}) 
+        } = await this._schema.create(item, {raw: true}) 
 
         return dataValues
     }
 
     async update(id, item) {
-        return this._herois.update(item, {where: {id:id}})
+        return this._schema.update(item, {where: {id:id}})
     }
 
     async delete(id) {
         const query = id ? {id} : {}
         
-        return this._herois.destroy({where: query})
+        return this._schema.destroy({where: query})
     }
 
     async read(item = {}) {
-        return this._herois.findAll({where: item, raw: true})
+        return this._schema.findAll({where: item, raw: true})
     }
 
-    async connect() {
-        this._driver = new Sequelize(
+    static async connect() {
+        const connection = new Sequelize(
             'heroes',
             'devnilo',
             'test',
@@ -75,10 +60,11 @@ class Postgres extends ICrud {
                 host: 'localhost',
                 dialect: 'postgres',
                 quoteIdentifiers: false,
-                operatorsAliases: false
+                operatorsAliases: false,
+                logging: false
             }
         )
-        await this.defineModel()
+        return connection
     }
 }
 
